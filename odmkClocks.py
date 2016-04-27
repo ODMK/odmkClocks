@@ -66,11 +66,17 @@ def randomIdx(n, k):
 
 class odmkClocks:
     ''' odmk audio/video clocking modules 
-        usage: myOdmkClks = odmkClocks(outLength, fs, bpm, framesPerSec)    
+        usage: myOdmkClks = odmkClocks(outLength, fs, bpm, framesPerSec, tsig)
+        xLength => defines length of seq in seconds (total track length)
+        fs => audio sample rate
+        bpm => bpm
+        framesPerSec => video frames per second
+        tsig => time signature: currently = number of quarters per bar (defaults to 4/4)
         ex: xDownFrames = myOdmkClks.clkDownFrames() ->
-        returns an np.array of 1's at 1st frame of downbeat, 0's elsewhere '''
+            returns an np.array of 1's at 1st frame of downbeat, 0's elsewhere
+    '''
 
-    def __init__(self, xLength, fs, bpm, framesPerSec):
+    def __init__(self, xLength, fs, bpm, framesPerSec, tsig=4):
 
         # *---set primary parameters from inputs---*
 
@@ -89,6 +95,8 @@ class odmkClocks:
         self.spb = 60.0 / bpm
         # set samplesPerBeat
         self.samplesPerBeat = fs * self.spb
+        # set samples per bar / 1 bar = tsig beats (ex. 4/4: 4*samplesPerBeat)
+        self.samplesPerBar = tsig * self.samplesPerBeat
 
         # set totalSamples - Total audio samples in x
         self.totalSamples = int(np.ceil(xLength * fs))
@@ -104,7 +112,6 @@ class odmkClocks:
 
         # set totalFrames - Total video frames in x
         self.totalFrames = int(np.ceil(xLength * framesPerSec))
-
 
 
     # // ******************************************************************* //
