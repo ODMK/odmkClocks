@@ -146,19 +146,39 @@ class odmkClocks:
         return xFramesDown
 
     # // *-----------------------------------------------------------------* //
-    # // *---gen note sequence (1 bar)
+    # // *---gen note sequence (xLength samples)
     # // *-----------------------------------------------------------------* //
 
     def clkQtrBeat(self):
-        ''' Output a 1 at Qtr downbeat for 1 bar (4/4, 4 qtr notes) '''
+        ''' Output a 1 at Qtr downbeat for xLength samples '''
+
+        # set samplesPerBeat
+        samplesPerQtr = self.samplesPerBeat    # assume 1Qtr = 1Beat
 
         xQtrBeat = np.zeros([self.totalSamples, 1])
         for i in range(self.totalSamples):
-            if i % np.ceil(self.samplesPerBeat) == 0:
-                xClockDown[i] = 1
+            if i % np.ceil(samplesPerQtr) == 0:
+                xQtrBeat[i] = 1
             else:
-                xClockDown[i] = 0
-        return xClockDown
+                xQtrBeat[i] = 0
+        return xQtrBeat
+
+    # // *-----------------------------------------------------------------* //
+    # // *---gen note sequence (nBar # of bars)
+    # // *-----------------------------------------------------------------* //
+
+    def clkQtrBar(self, nBar=1):
+        ''' Output a 1 at Qtr downbeat for 'nBar' bars (4/4, 4 qtr notes)
+            optional nBar parameter: default nBar = 1 bar '''
+
+        numSamples = int(np.ceil(nBar * self.samplesPerBar))
+        xQtrBar = np.zeros([numSamples, 1])
+        for i in range(numSamples):
+            if i % np.ceil(self.samplesPerBeat) == 0:
+                xQtrBar[i] = 1
+            else:
+                xQtrBar[i] = 0
+        return xQtrBar
 
 # /////////////////////////////////////////////////////////////////////////////
 # #############################################################################
