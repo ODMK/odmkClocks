@@ -32,7 +32,6 @@ import sys
 
 #sys.path.insert(0, 'C:/odmkDev/odmkCode/odmkPython/util')
 sys.path.insert(0, rootDir+'util')
-from odmkClear import *
 #from odmkPlotUtil import *
 import odmkPlotUtil as odmkplt
 
@@ -43,9 +42,6 @@ import odmkSigGen1 as sigGen
 
 # temp python debugger - use >>>pdb.set_trace() to set break
 #import pdb
-
-# // *---------------------------------------------------------------------* //
-clear_all()
 
 
 # // *---------------------------------------------------------------------* //
@@ -78,106 +74,6 @@ def cyclicZn(n):
 
     return cZn
     
-    
-# // *---------------------------------------------------------------------* //
-# // *--Plot Functions--*
-# // *---------------------------------------------------------------------* //    
-
-#def odmkPlot1D(fnum, sig, xLin, pltTitle, pltXlabel, pltYlabel, lncolor='red', lnstyle='-', lnwidth=1.00, pltGrid=True, pltBgColor='black'):
-#    ''' ODMK 1D Matplotlib plot
-#        required inputs:
-#        fnum => unique plot number
-#        sig => signal to plot
-#        xLin => linear space to define x-axis (0 to max x-axis length-1)
-#        pltTitle => text string for plot title
-#        pltXlabel => text string for x-axis
-#        pltYlabel => text string for y-axis
-#        optional inputs:
-#        lncolor => line color (default = red ; html color names, html color codes??)
-#        lnstyle => line style (default = plain line ; * ; o ; etc..)
-#        lnwidth => line width
-#        pltGrid => use grid : default = True ; <True;False>
-#        pltBgColor => backgroud color (default = black) '''
-#
-#    # Input signal
-#    plt.figure(num=fnum, facecolor='silver', edgecolor='k')
-#    # check if xLin is < than or = to sig
-#    if len(xLin) > len(sig):
-#        print('ERROR: length of xLin x-axis longer than signal length')
-#        return 1
-#    elif len(xLin) == len(sig):
-#        odmkMatPlt = plt.plot(xLin, sig)
-#    else:
-#        odmkMatPlt = plt.plot(xLin, sig[0:len(xLin)])
-#
-#    plt.setp(odmkMatPlt, color=lncolor, ls=lnstyle, linewidth=lnwidth)
-#    plt.xlabel(pltXlabel)
-#    plt.ylabel(pltYlabel)
-#    plt.title(pltTitle)
-#    plt.grid(color='c', linestyle=':', linewidth=.5)
-#    plt.grid(pltGrid)
-#    # plt.xticks(np.linspace(0, Fs/2, 10))
-#    ax = plt.gca()
-#    ax.set_axis_bgcolor(pltBgColor)
-#
-#    return 0
-#    
-#def odmkMultiPlot1D(fnum, sigArray, xLin, pltTitle, pltXlabel, pltYlabel, colorMp='gnuplot', lnstyle='-', lnwidth=1.00, pltGrid=True, pltBgColor='black'):
-#    ''' ODMK 1D Matplotlib multi-plot
-#        required inputs:
-#        fnum => unique plot number
-#        sig => signal to plot : 2D Numpy array
-#        xLin => linear space to define x-axis (0 to max x-axis length-1)
-#        pltTitle => text string for plot title
-#        pltXlabel => text string for x-axis
-#        pltYlabel => text string for y-axis
-#        optional inputs:
-#        lncolor => line color (default = red ; html color names, html color codes??)
-#        lnstyle => line style (default = plain line ; * ; o ; etc..)
-#        lnwidth => line width
-#        pltGrid => use grid : default = True ; <True;False>
-#        pltBgColor => backgroud color (default = black) '''
-#
-#    # define the color map
-#    try:
-#        cmap = plt.cm.get_cmap(colorMp)
-#    except ValueError as e:
-#        print('ValueError: ', e)
-#    colors = cmap(np.linspace(0.0, 1.0, len(sigArray[0, :])))
-#
-#    # Input signal
-#    plt.figure(num=fnum, facecolor='silver', edgecolor='k')
-#    # check if xLin is < than or = to sig
-#    if len(xLin) > len(sigArray[:, 0]):
-#        print('ERROR: length of xLin x-axis longer than signal length')
-#        return 1
-#    else:
-#        if len(xLin) == len(sigArray[:, 0]):
-#            # odmkMatPlt = []
-#            for i in range(len(sinArray[0, :])):
-#                plt.plot(xLin, sigArray[:, i], color=colors[i], ls=lnstyle, linewidth=lnwidth)
-#        else:
-#            # odmkMatPlt = []
-#            for i in range(len(sinArray[0, :])):
-#                plt.plot(xLin, sigArray[0:len(xLin), i], color=colors[i], ls=lnstyle, linewidth=lnwidth)
-#
-#        plt.xlabel(pltXlabel)
-#        plt.ylabel(pltYlabel)
-#        plt.title(pltTitle)
-#        plt.grid(color='c', linestyle=':', linewidth=.5)
-#        plt.grid(pltGrid)
-#        # plt.xticks(np.linspace(0, Fs/2, 10))
-#        ax = plt.gca()
-#        ax.set_axis_bgcolor(pltBgColor)
-#
-#    return 0    
-
-# /////////////////////////////////////////////////////////////////////////////
-# #############################################################################
-# end : function definitions
-# #############################################################################
-# \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
 
 # /////////////////////////////////////////////////////////////////////////////
 # #############################################################################
@@ -269,6 +165,14 @@ TBtotalFrames = tbClocks.totalFrames
 
 tbclkDownBeats = tbClocks.clkDownBeats()
 
+tbclkDownBeatsGnr = np.array([y for y in tbClocks.clkDownBeatsGnr()])
+
+#alt
+#tbclkDownBeatsGnr = np.zeros([tbxLength, 1])
+#for y in range(tbxLength):
+#    tbclkDownBeatsGnr[y] = tbClocks.clkDownBeatsGnr()
+
+
 tbclkDownFrames = tbClocks.clkDownFrames()
 
 tbclkQtrBeat = tbClocks.clkQtrBeat()
@@ -278,6 +182,15 @@ tbclkQtrBeatBar = tbClocks.clkQtrBeatBar(nbar)
 
 n = 7
 tbclkDivNBeat = tbClocks.clkDivNBeat(n)
+
+Xnote = 8
+tbclkXbeat = tbClocks.clkXBeat(Xnote)
+
+
+Xnote2 = 6
+pulseWidth = int(tbClocks.samplesPerBeat/3)
+tbclkXpulse = tbClocks.clkXPulse(Xnote2, pulseWidth)
+
 
 
 print('\nCreated odmkClocks object "tbClock" with the following parameters:')
@@ -299,7 +212,7 @@ print('totalFrames = '+str(TBtotalFrames))
 
 # // *---------------------------------------------------------------------* //
 
-odmkPlots = 0;
+odmkPlots = 1;
 if odmkPlots == 1:
     
     print('\n')
@@ -312,19 +225,32 @@ if odmkPlots == 1:
     # // *---------------------------------------------------------------------* //
     
     # define a sub-range for wave plot visibility
-    tLen = tbtotalSamples
+    tLen = int(tbtotalSamples)
     
     fnum = 1
-    pltTitle = 'Input Signal tbclkDivNBeat (first '+str(tLen)+' samples)'
-    pltXlabel = 'tbclkDivNBeat: '+str(n)+' beats per bar'
+    pltTitle = 'Input Signal tbclkXbeat (first '+str(tLen)+' samples)'
+    pltXlabel = 'tbclkXbeat: '+str(n)+' beats per bar'
     pltYlabel = 'Magnitude'
 
     # define a linear space from 0 to 1/2 Fs for x-axis:
     xaxis = np.linspace(0, tLen, tLen)
     
-    odmkplt.odmkPlot1D(fnum, tbclkDivNBeat[0:tLen], xaxis, pltTitle, pltXlabel, pltYlabel)
+    odmkplt.odmkPlot1D(fnum, tbclkXbeat[0:tLen], xaxis, pltTitle, pltXlabel, pltYlabel)
     
+   
+    # define a sub-range for wave plot visibility
+    tLen = int(tbtotalSamples)
     
+    fnum = 2
+    pltTitle = 'Input Signal tbclkPulse (first '+str(tLen)+' samples)'
+    pltXlabel = 'tbclkPulse: '+str(n)+' beats per bar'
+    pltYlabel = 'Magnitude'
+
+    # define a linear space from 0 to 1/2 Fs for x-axis:
+    xaxis = np.linspace(0, tLen, tLen)
+    
+    odmkplt.odmkPlot1D(fnum, .97*tbclkXpulse[0:tLen], xaxis, pltTitle, pltXlabel, pltYlabel)   
+   
     
 #    # // *---------------------------------------------------------------------* //
 #    # // *---Multi Plot - source signal array vs. FFT MAG out array---*
